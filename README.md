@@ -1,1 +1,1 @@
-# spectrum_os_management_tool
+# SpectrumOS Testing Environment Management Tool
