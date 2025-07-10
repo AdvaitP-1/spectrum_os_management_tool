@@ -35,7 +35,7 @@ export class LoginPage {
     { id: 'P0123456', name: 'Advait Pandey' }
   ];
 
-  environments = ['QA', 'UAT', 'PROD', 'Staging'];
+  environments = ['QA', 'UAT', 'Staging'];
 
   onDemoUserChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
