@@ -1,0 +1,606 @@
+<!-- Header -->
+<header class="bg-white border-b border-gray-200 px-6 py-4">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <h1 class="text-2xl font-bold text-gray-900">Spectrum Management</h1>
+      <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500">Environment:</span>
+        <select [(ngModel)]="currentEnvironment" 
+                (change)="switchEnvironment()"
+                class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="QA">QA</option>
+          <option value="UAT">UAT</option>
+          <option value="PROD">PROD</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500 text-sm font-semibold text-white">
+          {{currentUser?.name?.charAt(0) || 'U'}}
+        </span>
+        <span class="text-sm text-gray-700">{{currentUser?.name}}</span>
+      </div>
+      <button (click)="logout()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Alert Messages -->
+<div class="px-6 py-2">
+  <div *ngIf="successMessage" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+    <span class="block sm:inline">{{successMessage}}</span>
+  </div>
+  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+    <span class="block sm:inline">{{errorMessage}}</span>
+  </div>
+</div>
+
+<div class="flex h-screen bg-gray-50">
+  <!-- Main Content -->
+  <main class="flex-1 overflow-x-hidden overflow-y-auto">
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b border-gray-200 px-6">
+      <div class="flex space-x-8">
+        <button (click)="setActiveTab('my-groups')" 
+                [class.border-blue-500]="activeTab === 'my-groups'"
+                [class.text-blue-600]="activeTab === 'my-groups'"
+                [class.border-transparent]="activeTab !== 'my-groups'"
+                [class.text-gray-500]="activeTab !== 'my-groups'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 hover:text-gray-700">
+          My Groups
+        </button>
+        <button (click)="setActiveTab('available-groups')" 
+                [class.border-blue-500]="activeTab === 'available-groups'"
+                [class.text-blue-600]="activeTab === 'available-groups'"
+                [class.border-transparent]="activeTab !== 'available-groups'"
+                [class.text-gray-500]="activeTab !== 'available-groups'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 hover:text-gray-700">
+          Available Groups
+        </button>
+        <button (click)="setActiveTab('all-users')" 
+                [class.border-blue-500]="activeTab === 'all-users'"
+                [class.text-blue-600]="activeTab === 'all-users'"
+                [class.border-transparent]="activeTab !== 'all-users'"
+                [class.text-gray-500]="activeTab !== 'all-users'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 hover:text-gray-700">
+          All Users
+        </button>
+        <button (click)="setActiveTab('create')" 
+                [class.border-green-500]="activeTab === 'create'"
+                [class.text-green-600]="activeTab === 'create'"
+                [class.border-transparent]="activeTab !== 'create'"
+                [class.text-gray-500]="activeTab !== 'create'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 hover:text-gray-700">
+          Create New
+        </button>
+      </div>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="p-6">
+      <!-- My Groups Tab -->
+      <div *ngIf="activeTab === 'my-groups'" class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">My Groups</h2>
+          <span class="text-sm text-gray-500">{{userGroups.length}} groups</span>
+        </div>
+        
+        <div *ngIf="userGroups.length === 0" class="text-center py-12">
+          <div class="text-gray-500 mb-4">
+            <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No groups yet</h3>
+          <p class="text-gray-500 mb-4">You haven't joined any groups yet. Browse available groups to get started.</p>
+          <button (click)="setActiveTab('available-groups')" 
+                  class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            Browse Available Groups
+          </button>
+        </div>
+        
+        <div *ngIf="userGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let group of userGroups" 
+               class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer group"
+               (click)="selectGroup(group)">
+            <div class="p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-lg font-bold text-white">
+                    {{group.name?.charAt(0) || 'G'}}
+                  </span>
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {{group.name}}
+                    </h3>
+                    <p class="text-sm text-gray-500">{{group.environment}}</p>
+                  </div>
+                </div>
+                <div class="flex space-x-2">
+                  <button (click)="leaveGroup(group.id); $event.stopPropagation()" 
+                          class="text-red-500 hover:text-red-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
+                  <button (click)="deleteGroup(group); $event.stopPropagation()" 
+                          class="text-gray-500 hover:text-red-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{group.description}}</p>
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-4">
+                  <span class="text-gray-500">{{group.users?.length || 0}} members</span>
+                  <span class="text-gray-500">{{getGroupPermissions(group).length}} permissions</span>
+                </div>
+              </div>
+              <div *ngIf="getGroupPermissions(group).length > 0" class="mt-3 flex flex-wrap gap-1">
+                <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                  {{permission.name}}
+                </span>
+                <span *ngIf="getGroupPermissions(group).length > 3" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                  +{{getGroupPermissions(group).length - 3}} more
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Groups Tab -->
+      <div *ngIf="activeTab === 'available-groups'" class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">Available Groups</h2>
+          <span class="text-sm text-gray-500">{{availableGroups.length}} groups</span>
+        </div>
+        
+        <div *ngIf="availableGroups.length === 0" class="text-center py-12">
+          <div class="text-gray-500 mb-4">
+            <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">All groups joined!</h3>
+          <p class="text-gray-500">You're a member of all available groups in this environment.</p>
+        </div>
+        
+        <div *ngIf="availableGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let group of availableGroups" 
+               class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer group"
+               (click)="selectGroup(group)">
+            <div class="p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-500 text-lg font-bold text-white">
+                    {{group.name?.charAt(0) || 'G'}}
+                  </span>
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                      {{group.name}}
+                    </h3>
+                    <p class="text-sm text-gray-500">{{group.environment}}</p>
+                  </div>
+                </div>
+                <button (click)="joinGroup(group.id); $event.stopPropagation()" 
+                        class="text-green-500 hover:text-green-700 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                  </svg>
+                </button>
+              </div>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{group.description}}</p>
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-4">
+                  <span class="text-gray-500">{{group.users?.length || 0}} members</span>
+                  <span class="text-gray-500">{{getGroupPermissions(group).length}} permissions</span>
+                </div>
+              </div>
+              <div *ngIf="getGroupPermissions(group).length > 0" class="mt-3 flex flex-wrap gap-1">
+                <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                  {{permission.name}}
+                </span>
+                <span *ngIf="getGroupPermissions(group).length > 3" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                  +{{getGroupPermissions(group).length - 3}} more
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Users Tab -->
+      <div *ngIf="activeTab === 'all-users'" class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-gray-900">All Users</h2>
+          <span class="text-sm text-gray-500">{{users.length}} users</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div *ngFor="let user of users" 
+               class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer group"
+               (click)="selectUser(user)">
+            <div class="p-6">
+              <div class="flex items-center space-x-4 mb-4">
+                <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-500 text-lg font-semibold text-white">
+                  {{user.name?.charAt(0) || 'U'}}
+                </span>
+                <div class="flex-1">
+                  <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                    {{user.name}}
+                  </h3>
+                  <p class="text-sm text-gray-600 font-mono">{{formatUserId(user.id)}}</p>
+                  <p class="text-xs text-slate-400 mt-1">Groups ({{user.groups?.length || 0}})</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-500">{{user.currentEnvironment}}</span>
+                <span class="text-gray-500">{{getUserPermissions(user).length}} permissions</span>
+              </div>
+              <div *ngIf="getUserPermissions(user).length > 0" class="mt-3 flex flex-wrap gap-1">
+                <span *ngFor="let permission of getUserPermissions(user).slice(0, 3)" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-indigo-100 text-indigo-800">
+                  {{permission.name}}
+                </span>
+                <span *ngIf="getUserPermissions(user).length > 3" 
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                  +{{getUserPermissions(user).length - 3}} more
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Create New Tab -->
+      <div *ngIf="activeTab === 'create'" class="space-y-8">
+        <h2 class="text-xl font-semibold text-gray-900">Create New</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Create Group Form -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Group</h3>
+            <form (ngSubmit)="createGroup()" #groupForm="ngForm">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Group Name</label>
+                  <input type="text" 
+                         [(ngModel)]="newGroup.name" 
+                         name="groupName"
+                         required
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         placeholder="Enter group name">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <textarea [(ngModel)]="newGroup.description" 
+                            name="groupDescription"
+                            required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter group description"
+                            rows="3"></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Environment</label>
+                  <select [(ngModel)]="newGroup.environment" 
+                          name="groupEnvironment"
+                          required
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select environment</option>
+                    <option value="QA">QA</option>
+                    <option value="UAT">UAT</option>
+                    <option value="PROD">PROD</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Permissions</label>
+                  <div class="max-h-32 overflow-y-auto border border-gray-300 rounded-md p-2">
+                    <div *ngFor="let permission of allPermissions" class="flex items-center space-x-2 py-1">
+                      <input type="checkbox" 
+                             [checked]="newGroup.permissionIds.includes(permission.id)"
+                             (change)="togglePermission(permission.id, $event)"
+                             class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                      <span class="text-sm text-gray-700">{{permission.name}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6">
+                <button type="submit" 
+                        [disabled]="!groupForm.valid || createLoading"
+                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50">
+                  <span *ngIf="!createLoading">Create Group</span>
+                  <span *ngIf="createLoading">Creating...</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Create Permission Form -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Permission</h3>
+            <form (ngSubmit)="createPermission()" #permissionForm="ngForm">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Permission Name</label>
+                  <input type="text" 
+                         [(ngModel)]="newPermission.name" 
+                         name="permissionName"
+                         required
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         placeholder="Enter permission name">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <textarea [(ngModel)]="newPermission.description" 
+                            name="permissionDescription"
+                            required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter permission description"
+                            rows="3"></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                  <select [(ngModel)]="newPermission.category" 
+                          name="permissionCategory"
+                          required
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select category</option>
+                    <option *ngFor="let category of permissionCategories" [value]="category">{{category}}</option>
+                    <option value="custom">Custom Category</option>
+                  </select>
+                </div>
+                <div *ngIf="newPermission.category === 'custom'">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Custom Category</label>
+                  <input type="text" 
+                         [(ngModel)]="customCategory" 
+                         name="customCategory"
+                         required
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         placeholder="Enter custom category">
+                </div>
+              </div>
+              <div class="mt-6">
+                <button type="submit" 
+                        [disabled]="!permissionForm.valid || createLoading"
+                        class="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:opacity-50">
+                  <span *ngIf="!createLoading">Create Permission</span>
+                  <span *ngIf="createLoading">Creating...</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" (click)="closeModal()">
+  <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white" (click)="$event.stopPropagation()">
+    
+    <!-- Group Details Modal -->
+    <div *ngIf="selectedGroup" class="space-y-6">
+      <div class="flex justify-between items-start">
+        <div class="flex items-center space-x-4">
+          <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500 text-xl font-bold text-white">
+            {{selectedGroup.name?.charAt(0) || 'G'}}
+          </span>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900">{{selectedGroup.name}}</h3>
+            <p class="text-gray-600">{{selectedGroup.environment}} Environment</p>
+            <p class="text-sm text-gray-500 mt-1">Created by {{selectedGroup.createdBy}}</p>
+          </div>
+        </div>
+        <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="border-t pt-6">
+        <p class="text-gray-700 leading-relaxed">{{selectedGroup.description}}</p>
+      </div>
+
+      <!-- Group Members Section -->
+      <div class="border-t pt-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">Group Members ({{selectedGroupMembers.length}})</h4>
+        
+        <div *ngIf="selectedGroupMembers.length === 0" class="text-center py-8">
+          <div class="text-gray-500 mb-2">
+            <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <p class="text-gray-600">No members in this group yet.</p>
+        </div>
+
+        <div *ngIf="selectedGroupMembers.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let member of selectedGroupMembers" 
+               class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500 text-sm font-semibold text-white">
+              {{member.name?.charAt(0) || 'U'}}
+            </span>
+            <div>
+              <p class="font-medium text-gray-900">{{member.name}}</p>
+              <p class="text-sm text-gray-600 font-mono">{{formatUserId(member.id)}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group Actions -->
+      <div class="flex space-x-3 pt-4 border-t">
+        <button *ngIf="!isUserInGroup(selectedGroup.id)" 
+                (click)="joinGroup(selectedGroup.id)" 
+                [disabled]="actionLoading"
+                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50">
+          <span *ngIf="!actionLoading">Join Group</span>
+          <span *ngIf="actionLoading" class="flex items-center justify-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Joining...
+          </span>
+        </button>
+        <button *ngIf="isUserInGroup(selectedGroup.id)" 
+                (click)="leaveGroup(selectedGroup.id)" 
+                [disabled]="actionLoading"
+                class="flex-1 px-4 py-2 border border-red-300 text-red-700 rounded-md hover:bg-red-50 transition-colors disabled:opacity-50">
+          <span *ngIf="!actionLoading">Leave Group</span>
+          <span *ngIf="actionLoading" class="flex items-center justify-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Leaving...
+          </span>
+        </button>
+      </div>
+
+      <!-- Permissions Section -->
+      <div class="border-t pt-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">Permissions</h4>
+        
+        <div *ngIf="!selectedGroup.permissions || selectedGroup.permissions?.length === 0" class="text-center py-8">
+          <div class="text-gray-500 mb-2">
+            <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <p class="text-gray-600">No permissions assigned to this group yet.</p>
+        </div>
+
+        <div *ngIf="selectedGroup.permissions && selectedGroup.permissions?.length > 0">
+          <div *ngFor="let category of getPermissionCategories(selectedGroup.permissions || [])" class="mb-8">
+            <h5 class="text-md font-medium text-gray-800 mb-3 pb-2 border-b border-gray-200">{{category}}</h5>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div *ngFor="let permission of getPermissionsByCategory(selectedGroup.permissions || [], category)" 
+                   class="bg-gray-50 p-3 rounded-lg">
+                <h6 class="font-medium text-gray-900 text-sm">{{permission.name}}</h6>
+                <p class="text-xs text-gray-600 mt-1">{{permission.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div *ngIf="selectedUser" class="space-y-6">
+      <div class="flex justify-between items-start">
+        <div class="flex items-center space-x-4">
+          <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500 text-xl font-bold text-white">
+            {{selectedUser.name?.charAt(0) || 'U'}}
+          </span>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900">{{selectedUser.name}}</h3>
+            <p class="text-gray-600 font-mono">{{formatUserId(selectedUser.id)}}</p>
+            <p class="text-sm text-gray-500 mt-1">Email: {{selectedUser.email}}</p>
+            <p class="text-sm text-gray-500">Environment: {{selectedUser.currentEnvironment}}</p>
+          </div>
+        </div>
+        <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- User Groups Section -->
+      <div class="border-t pt-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">Groups ({{selectedUser.groups?.length || 0}})</h4>
+        
+        <div *ngIf="!selectedUser.groups || selectedUser.groups.length === 0" class="text-center py-8">
+          <div class="text-gray-500 mb-2">
+            <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <p class="text-gray-600">User is not a member of any groups.</p>
+        </div>
+
+        <div *ngIf="selectedUser.groups && selectedUser.groups.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div *ngFor="let group of selectedUser.groups" 
+               class="bg-gray-50 p-4 rounded-lg">
+            <h6 class="font-medium text-gray-900">{{group.name}}</h6>
+            <p class="text-sm text-gray-600 mt-1">{{group.environment}} Environment</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Permissions Section -->
+      <div class="border-t pt-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">Permissions</h4>
+        
+        <div *ngIf="getUserPermissions(selectedUser).length === 0" class="text-center py-8">
+          <div class="text-gray-500 mb-2">
+            <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <p class="text-gray-600">No permissions assigned to this user yet.</p>
+        </div>
+
+        <div *ngIf="getUserPermissions(selectedUser).length > 0">
+          <div *ngFor="let category of getPermissionCategories(getUserPermissions(selectedUser))" class="mb-8">
+            <h5 class="text-md font-medium text-gray-800 mb-3 pb-2 border-b border-gray-200">{{category}}</h5>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div *ngFor="let permission of getPermissionsByCategory(getUserPermissions(selectedUser), category)" 
+                   class="bg-gray-50 p-3 rounded-lg">
+                <h6 class="font-medium text-gray-900 text-sm">{{permission.name}}</h6>
+                <p class="text-xs text-gray-600 mt-1">{{permission.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirmation" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+  <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+    <div class="mt-3 text-center">
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+      </div>
+      <h3 class="text-lg leading-6 font-medium text-gray-900 mt-2">Delete Group</h3>
+      <div class="mt-2 px-7 py-3">
+        <p class="text-sm text-gray-500">
+          Are you sure you want to delete "<strong>{{groupToDelete?.name}}</strong>"? This action cannot be undone.
+        </p>
+      </div>
+      <div class="items-center px-4 py-3">
+        <button (click)="confirmDeleteGroup()" 
+                [disabled]="actionLoading"
+                class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50">
+          <span *ngIf="!actionLoading">Delete Group</span>
+          <span *ngIf="actionLoading">Deleting...</span>
+        </button>
+        <button (click)="closeDeleteConfirmation()" 
+                class="mt-3 px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 
