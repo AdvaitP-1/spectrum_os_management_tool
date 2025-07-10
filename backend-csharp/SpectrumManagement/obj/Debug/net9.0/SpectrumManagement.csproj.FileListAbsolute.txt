@@ -1,5 +1,6 @@
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/appsettings.Development.json
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/appsettings.json
+/Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/appsettings.Production.json
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/SpectrumManagement.staticwebassets.endpoints.json
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/SpectrumManagement
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/SpectrumManagement.deps.json
@@ -168,4 +169,3 @@
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/obj/Debug/net9.0/SpectrumManagement.pdb
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/obj/Debug/net9.0/SpectrumManagement.genruntimeconfig.cache
 /Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/obj/Debug/net9.0/ref/SpectrumManagement.dll
-/Users/advaitpandey/Documents/sp/spectrum_os_management_tool/backend-csharp/SpectrumManagement/bin/Debug/net9.0/appsettings.Production.json

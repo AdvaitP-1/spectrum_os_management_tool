@@ -224,17 +224,16 @@ export class DashboardPage implements OnInit, OnDestroy {
     if (!this.dashboardState.currentUser) return;
 
     this.loadingState.dataLoading = true;
-    
-    const loadOperations = forkJoin([
-      this.apiService.getGroupsByUser(this.dashboardState.currentUser.id, this.dashboardState.currentEnvironment),
-      this.apiService.getGroups(this.dashboardState.currentEnvironment),
-      this.apiService.getUsers(),
+
+    const requests = forkJoin([
+      this.apiService.getUserGroups(this.dashboardState.currentUser.id, this.dashboardState.currentEnvironment),
+      this.apiService.getAllGroups(this.dashboardState.currentEnvironment), 
+      this.apiService.getUsers(this.dashboardState.currentEnvironment),
       this.apiService.getPermissions(),
       this.apiService.getPermissionCategories()
-    ] as const);
+    ]);
 
-    loadOperations
-      .pipe(takeUntil(this.destroy$))
+    requests.pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (results) => {
           this.handleDataLoadSuccess(results);
