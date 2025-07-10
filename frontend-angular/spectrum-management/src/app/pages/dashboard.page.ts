@@ -161,6 +161,10 @@ export class DashboardPage implements OnInit, OnDestroy {
     return this.modalState.selectedGroupMembers;
   }
 
+  get groupToDelete(): Group | null {
+    return this.modalState.groupToDelete;
+  }
+
   get actionLoading(): boolean {
     return this.loadingState.actionLoading;
   }
@@ -428,6 +432,10 @@ export class DashboardPage implements OnInit, OnDestroy {
     });
 
     return permissions;
+  }
+
+  public getGroupPermissions(group: Group): Permission[] {
+    return group.permissions || [];
   }
 
   public getPermissionCategories(permissions: Permission[]): string[] {

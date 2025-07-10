@@ -8,8 +8,8 @@ export interface Group {
   environment: string;
   createdAt: Date;
   createdBy: string;
-  permissions: Permission[];
-  users: SimpleUser[];
+  permissions?: Permission[];
+  users?: SimpleUser[];
   userCount: number;
 }
 

@@ -57,6 +57,17 @@ export class UserService {
     }
   }
 
+  updateUser(user: User): Observable<void> {
+    return this.apiService.updateUser(user.id, user).pipe(
+      tap(() => {
+        // If updating the current user, update the local state too
+        if (this.currentUser && this.currentUser.id === user.id) {
+          this.updateCurrentUser(user);
+        }
+      })
+    );
+  }
+
   switchEnvironment(environment: string): Observable<User> {
     const currentUser = this.currentUser;
     if (!currentUser) {

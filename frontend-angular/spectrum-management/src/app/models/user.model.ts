@@ -7,7 +7,7 @@ export interface User {
   currentEnvironment: string;
   createdAt: Date;
   lastLoginAt: Date;
-  groups: SimpleGroup[];
+  groups?: SimpleGroup[];
 }
 
 export interface SimpleUser {

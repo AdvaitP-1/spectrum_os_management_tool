@@ -66,6 +66,15 @@ export class ApiService {
     return this.http.get<Group[]>(`${this.baseUrl}/groups`, { params });
   }
 
+  // Alias methods for dashboard compatibility
+  getUserGroups(userId: string, environment?: string): Observable<Group[]> {
+    return this.getGroupsByUser(userId, environment);
+  }
+
+  getAllGroups(environment?: string): Observable<Group[]> {
+    return this.getGroups(environment);
+  }
+
   getGroup(id: number): Observable<Group> {
     return this.http.get<Group>(`${this.baseUrl}/groups/${id}`);
   }
@@ -94,7 +103,7 @@ export class ApiService {
     return this.http.get<string[]>(`${this.baseUrl}/groups/environments`);
   }
 
-  getGroupMembers(userId: string, groupId: number): Observable<User[]> {
+  getGroupMembers(groupId: number): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/groups/${groupId}/members`);
   }
 
