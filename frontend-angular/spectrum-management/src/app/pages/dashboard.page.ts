@@ -290,6 +290,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     };
 
     this.userService.updateCurrentUser(updatedUser);
+    this.newGroup.environment = this.dashboardState.currentEnvironment;
     this.loadDashboardData();
   }
 
@@ -570,7 +571,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     return {
       name: '',
       description: '',
-      environment: '',
+      environment: this.dashboardState.currentEnvironment,
       permissionIds: []
     };
   }
@@ -585,6 +586,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   private resetGroupForm(): void {
     this.newGroup = this.createEmptyGroup();
+    this.newGroup.environment = this.dashboardState.currentEnvironment;
   }
 
   private resetPermissionForm(): void {

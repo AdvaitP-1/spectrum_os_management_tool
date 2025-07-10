@@ -7,7 +7,7 @@
         <span class="text-sm text-gray-500">Environment:</span>
         <select [(ngModel)]="currentEnvironment" 
                 (change)="switchEnvironment()"
-                class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                class="px-3 py-1 border border-gray-300 rounded-md text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="QA">QA</option>
           <option value="UAT">UAT</option>
           <option value="PROD">PROD</option>
@@ -112,7 +112,7 @@
               <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center space-x-3">
                   <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-lg font-bold text-white">
-                    {{group.name?.charAt(0) || 'G'}}
+                    {{group.name.charAt(0) || 'G'}}
                   </span>
                   <div>
                     <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
@@ -183,7 +183,7 @@
               <div class="flex items-start justify-between mb-4">
                 <div class="flex items-center space-x-3">
                   <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-500 text-lg font-bold text-white">
-                    {{group.name?.charAt(0) || 'G'}}
+                    {{group.name.charAt(0) || 'G'}}
                   </span>
                   <div>
                     <h3 class="text-lg font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
@@ -235,7 +235,7 @@
             <div class="p-6">
               <div class="flex items-center space-x-4 mb-4">
                 <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-500 text-lg font-semibold text-white">
-                  {{user.name?.charAt(0) || 'U'}}
+                  {{user.name.charAt(0) || 'U'}}
                 </span>
                 <div class="flex-1">
                   <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
@@ -280,7 +280,7 @@
                          [(ngModel)]="newGroup.name" 
                          name="groupName"
                          required
-                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                          placeholder="Enter group name">
                 </div>
                 <div>
@@ -288,7 +288,7 @@
                   <textarea [(ngModel)]="newGroup.description" 
                             name="groupDescription"
                             required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter group description"
                             rows="3"></textarea>
                 </div>
@@ -297,8 +297,7 @@
                   <select [(ngModel)]="newGroup.environment" 
                           name="groupEnvironment"
                           required
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Select environment</option>
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="QA">QA</option>
                     <option value="UAT">UAT</option>
                     <option value="PROD">PROD</option>
@@ -339,7 +338,7 @@
                          [(ngModel)]="newPermission.name" 
                          name="permissionName"
                          required
-                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                          placeholder="Enter permission name">
                 </div>
                 <div>
@@ -347,7 +346,7 @@
                   <textarea [(ngModel)]="newPermission.description" 
                             name="permissionDescription"
                             required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Enter permission description"
                             rows="3"></textarea>
                 </div>
@@ -356,7 +355,7 @@
                   <select [(ngModel)]="newPermission.category" 
                           name="permissionCategory"
                           required
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Select category</option>
                     <option *ngFor="let category of permissionCategories" [value]="category">{{category}}</option>
                     <option value="custom">Custom Category</option>
@@ -368,7 +367,7 @@
                          [(ngModel)]="customCategory" 
                          name="customCategory"
                          required
-                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                          placeholder="Enter custom category">
                 </div>
               </div>
@@ -397,7 +396,7 @@
       <div class="flex justify-between items-start">
         <div class="flex items-center space-x-4">
           <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500 text-xl font-bold text-white">
-            {{selectedGroup.name?.charAt(0) || 'G'}}
+            {{selectedGroup.name.charAt(0) || 'G'}}
           </span>
           <div>
             <h3 class="text-2xl font-bold text-gray-900">{{selectedGroup.name}}</h3>
@@ -433,7 +432,7 @@
           <div *ngFor="let member of selectedGroupMembers" 
                class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
             <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500 text-sm font-semibold text-white">
-              {{member.name?.charAt(0) || 'U'}}
+              {{member.name.charAt(0) || 'U'}}
             </span>
             <div>
               <p class="font-medium text-gray-900">{{member.name}}</p>
@@ -477,7 +476,7 @@
       <div class="border-t pt-6">
         <h4 class="text-lg font-semibold text-gray-900 mb-4">Permissions</h4>
         
-        <div *ngIf="!selectedGroup?.permissions || selectedGroup?.permissions?.length === 0" class="text-center py-8">
+        <div *ngIf="!selectedGroup?.permissions || (selectedGroup?.permissions?.length || 0) === 0" class="text-center py-8">
           <div class="text-gray-500 mb-2">
             <svg class="mx-auto h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -506,7 +505,7 @@
       <div class="flex justify-between items-start">
         <div class="flex items-center space-x-4">
           <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500 text-xl font-bold text-white">
-            {{selectedUser.name?.charAt(0) || 'U'}}
+            {{selectedUser.name.charAt(0) || 'U'}}
           </span>
           <div>
             <h3 class="text-2xl font-bold text-gray-900">{{selectedUser.name}}</h3>
