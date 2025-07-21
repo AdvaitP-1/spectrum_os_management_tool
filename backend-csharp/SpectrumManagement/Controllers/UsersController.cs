@@ -96,7 +96,6 @@ namespace SpectrumManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto)
         {
-            // Generate user ID
             var userId = GenerateUserId();
 
             var user = new User
@@ -169,7 +168,6 @@ namespace SpectrumManagement.Controllers
                 return NotFound();
             }
 
-            // Check if user is already in the group
             var existingMembership = await _context.UserGroups
                 .FirstOrDefaultAsync(ug => ug.UserId == userId && ug.GroupId == groupId);
 
@@ -253,11 +251,10 @@ namespace SpectrumManagement.Controllers
             
             do
             {
-                // Generate 7 random numbers
                 var numbers = string.Join("", Enumerable.Range(0, 7).Select(_ => random.Next(0, 10)));
                 userId = $"P{numbers}";
             }
-            while (_context.Users.Any(u => u.Id == userId)); // Ensure uniqueness
+            while (_context.Users.Any(u => u.Id == userId));
 
             return userId;
         }

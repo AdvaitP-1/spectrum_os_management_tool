@@ -60,7 +60,6 @@ export class LoginPage {
     this.error = '';
 
     try {
-      // Use the selected demo user ID for login
       const user = await this.apiService.login(this.selectedDemoUserId).toPromise();
       
       if (user) {

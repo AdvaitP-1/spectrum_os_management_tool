@@ -16,8 +16,7 @@ namespace SpectrumManagement.Models
         public DateTime GrantedAt { get; set; } = DateTime.UtcNow;
         public string GrantedBy { get; set; } = string.Empty;
         
-        // Navigation properties
-        public virtual Group Group { get; set; } = null!;
+            public virtual Group Group { get; set; } = null!;
         public virtual Permission Permission { get; set; } = null!;
     }
 } 

@@ -16,7 +16,6 @@ export class UserService {
     private apiService: ApiService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Try to restore user from localStorage (only in browser)
     if (isPlatformBrowser(this.platformId)) {
       const savedUser = localStorage.getItem('currentUser');
       if (savedUser) {
@@ -60,7 +59,6 @@ export class UserService {
   updateUser(user: User): Observable<void> {
     return this.apiService.updateUser(user.id, user).pipe(
       tap(() => {
-        // If updating the current user, update the local state too
         if (this.currentUser && this.currentUser.id === user.id) {
           this.updateCurrentUser(user);
         }
@@ -74,7 +72,6 @@ export class UserService {
       throw new Error('No user logged in');
     }
 
-    // Update user environment and return the updated user
     return this.apiService.updateUser(currentUser.id, {
       ...currentUser,
       currentEnvironment: environment

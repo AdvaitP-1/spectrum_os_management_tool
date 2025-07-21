@@ -5,7 +5,7 @@ namespace SpectrumManagement.Models
     public class User
     {
         [Key]
-        public string Id { get; set; } = string.Empty; // Format: P1234567
+        public string Id { get; set; } = string.Empty;
         
         [Required]
         [StringLength(100)]
@@ -17,12 +17,11 @@ namespace SpectrumManagement.Models
         
         [Required]
         [StringLength(10)]
-        public string CurrentEnvironment { get; set; } = "QA"; // QA, UAT
+        public string CurrentEnvironment { get; set; } = "QA";
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime LastLoginAt { get; set; } = DateTime.UtcNow;
         
-        // Navigation properties
-        public virtual ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+            public virtual ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
     }
 } 

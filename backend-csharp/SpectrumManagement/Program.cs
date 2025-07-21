@@ -4,42 +4,35 @@ using SpectrumManagement.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add Entity Framework with flexible database configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var useInMemoryDb = builder.Configuration.GetValue<bool>("UseInMemoryDatabase", false);
 
 if (useInMemoryDb || string.IsNullOrEmpty(connectionString))
 {
-    // Use in-memory database for development/testing
     builder.Services.AddDbContext<SpectrumDbContext>(options =>
         options.UseInMemoryDatabase("SpectrumManagementInMemory"));
     Console.WriteLine("Using in-memory database for development");
 }
 else
 {
-    // Use SQL Server for production
     builder.Services.AddDbContext<SpectrumDbContext>(options =>
         options.UseSqlServer(connectionString));
     Console.WriteLine($"Using SQL Server database: {connectionString}");
 }
 
-// Add CORS - configure this based on your frontend deployment
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        // For development
         policy.WithOrigins("http://localhost:4200", "http://localhost:4201", "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
         
-        // For production - update these URLs to match your frontend deployment
         var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
         if (allowedOrigins?.Length > 0)
         {
@@ -67,46 +60,37 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SpectrumDbContext>();
     
     if (useInMemoryDb || string.IsNullOrEmpty(connectionString))
     {
-        // For in-memory database, just ensure created
         context.Database.EnsureCreated();
     }
     else
     {
-        // For SQL Server, ensure created
         context.Database.EnsureCreated();
     }
     
-    // Seed data if database is empty
     if (!context.Permissions.Any())
     {
-        // Create sample permissions
         var permissions = new List<Permission>
         {
-            // Database permissions
             new Permission { Name = "Read Database", Description = "View database records and schemas", Category = "Database" },
             new Permission { Name = "Write Database", Description = "Insert and update database records", Category = "Database" },
             new Permission { Name = "Delete Database", Description = "Delete database records", Category = "Database" },
             new Permission { Name = "Admin Database", Description = "Full database administration access", Category = "Database" },
             
-            // API permissions
             new Permission { Name = "Read API", Description = "Make GET requests to API endpoints", Category = "API" },
             new Permission { Name = "Write API", Description = "Make POST/PUT requests to API endpoints", Category = "API" },
             new Permission { Name = "Delete API", Description = "Make DELETE requests to API endpoints", Category = "API" },
             new Permission { Name = "Admin API", Description = "Full API access including system endpoints", Category = "API" },
             
-            // System permissions
             new Permission { Name = "Read System", Description = "View system configurations and logs", Category = "System" },
             new Permission { Name = "Write System", Description = "Modify system configurations", Category = "System" },
             new Permission { Name = "Admin System", Description = "Full system administration access", Category = "System" },
             
-            // User management permissions
             new Permission { Name = "Read Users", Description = "View user accounts and profiles", Category = "User Management" },
             new Permission { Name = "Write Users", Description = "Create and modify user accounts", Category = "User Management" },
             new Permission { Name = "Delete Users", Description = "Delete user accounts", Category = "User Management" }
@@ -115,7 +99,6 @@ using (var scope = app.Services.CreateScope())
         context.Permissions.AddRange(permissions);
         context.SaveChanges();
         
-        // Create sample groups
         var groups = new List<Group>
         {
             new Group 
@@ -145,7 +128,6 @@ using (var scope = app.Services.CreateScope())
         context.Groups.AddRange(groups);
         context.SaveChanges();
         
-        // Assign permissions to groups
         var dbAdminPerms = permissions.Where(p => p.Category == "Database" || p.Name.Contains("Admin")).ToList();
         var apiDevPerms = permissions.Where(p => p.Category == "API" || p.Category == "Database" && !p.Name.Contains("Delete")).ToList();
         var sysOpPerms = permissions.Where(p => p.Category == "System" && p.Name.Contains("Read")).ToList();
@@ -153,7 +135,6 @@ using (var scope = app.Services.CreateScope())
         
         var groupPermissions = new List<GroupPermission>();
         
-        // Database Admins groups get full database and admin permissions
         foreach (var group in groups.Where(g => g.Name == "Database Admins"))
         {
             foreach (var perm in dbAdminPerms)
@@ -167,7 +148,6 @@ using (var scope = app.Services.CreateScope())
             }
         }
         
-        // API Developers get API and some database permissions
         foreach (var group in groups.Where(g => g.Name == "API Developers"))
         {
             foreach (var perm in apiDevPerms)
@@ -181,7 +161,6 @@ using (var scope = app.Services.CreateScope())
             }
         }
         
-        // System Operators get system read permissions
         foreach (var group in groups.Where(g => g.Name == "System Operators"))
         {
             foreach (var perm in sysOpPerms)
@@ -195,7 +174,6 @@ using (var scope = app.Services.CreateScope())
             }
         }
         
-        // Read Only Users get only read permissions
         foreach (var group in groups.Where(g => g.Name == "Read Only Users"))
         {
             foreach (var perm in readOnlyPerms)

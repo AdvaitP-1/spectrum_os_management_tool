@@ -16,13 +16,12 @@ namespace SpectrumManagement.Models
         
         [Required]
         [StringLength(10)]
-        public string Environment { get; set; } = string.Empty; // QA, UAT
+        public string Environment { get; set; } = string.Empty;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string CreatedBy { get; set; } = string.Empty;
         
-        // Navigation properties
-        public virtual ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+            public virtual ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
         public virtual ICollection<GroupPermission> GroupPermissions { get; set; } = new List<GroupPermission>();
     }
 } 

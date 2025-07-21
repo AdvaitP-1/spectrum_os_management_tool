@@ -16,7 +16,6 @@ export class ApiService {
     console.log('ApiService initialized with baseUrl:', this.baseUrl);
   }
 
-  // User endpoints
   getUsers(environment?: string): Observable<User[]> {
     let params = new HttpParams();
     if (environment) {
@@ -61,18 +60,15 @@ export class ApiService {
     });
   }
 
-  // Group endpoints
   getGroups(environment?: string): Observable<Group[]> {
     let params = new HttpParams();
     if (environment) {
       params = params.set('environment', environment);
     }
-    // Add cache-busting parameter
     params = params.set('_t', Date.now().toString());
     return this.http.get<Group[]>(`${this.baseUrl}/groups`, { params });
   }
 
-  // Alias methods for dashboard compatibility
   getUserGroups(userId: string, environment?: string): Observable<Group[]> {
     return this.getGroupsByUser(userId, environment);
   }
@@ -117,7 +113,6 @@ export class ApiService {
     return this.http.get<User[]>(`${this.baseUrl}/groups/${groupId}/members`);
   }
 
-  // Permission endpoints
   getPermissions(category?: string): Observable<Permission[]> {
     let params = new HttpParams();
     if (category) {

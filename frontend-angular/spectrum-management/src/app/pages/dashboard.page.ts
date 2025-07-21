@@ -50,10 +50,8 @@ interface MessageState {
   styleUrl: './dashboard.page.scss'
 })
 export class DashboardPage implements OnInit, OnDestroy {
-  // State management
-  private readonly destroy$ = new Subject<void>();
-  
-  // Dashboard state
+    private readonly destroy$ = new Subject<void>();
+
   public dashboardState: DashboardState = {
     currentUser: null,
     userGroups: [],
@@ -65,7 +63,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     activeTab: 'my-groups'
   };
 
-  // Modal state
   public modalState: ModalState = {
     showModal: false,
     showDeleteConfirmation: false,
@@ -75,20 +72,17 @@ export class DashboardPage implements OnInit, OnDestroy {
     selectedGroupMembers: []
   };
 
-  // Loading state
   public loadingState: LoadingState = {
     actionLoading: false,
     createLoading: false,
     dataLoading: false
   };
 
-  // Message state
   public messageState: MessageState = {
     successMessage: '',
     errorMessage: ''
   };
 
-  // Form data
   public newGroup: CreateGroup = this.createEmptyGroup();
   public newPermission: CreatePermission = this.createEmptyPermission();
   public customCategory: string = '';
@@ -108,7 +102,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // Public getters for template access
   get currentUser(): User | null {
     return this.dashboardState.currentUser;
   }
@@ -189,7 +182,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     return this.messageState.errorMessage;
   }
 
-  // Initialization methods
   private initializeComponent(): void {
     this.subscribeToUserChanges();
     this.loadInitialData();
@@ -223,7 +215,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.loadDashboardData();
   }
 
-  // Data loading methods
   private loadDashboardData(): void {
     if (!this.dashboardState.currentUser) return;
 
@@ -262,10 +253,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.dashboardState.allPermissions = permissions;
     this.dashboardState.permissionCategories = categories;
     
-    // Filter available groups (exclude groups user is already in)
     this.updateAvailableGroups(allGroups, userGroups);
-    
-    this.showSuccessMessage('Dashboard data loaded successfully');
   }
 
   private handleDataLoadError(error: any): void {
@@ -275,14 +263,12 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   private updateAvailableGroups(allGroups: Group[], userGroups: Group[]): void {
-    // Filter out groups the user is already in
     const userGroupIds = new Set(userGroups.map(group => group.id));
     this.dashboardState.availableGroups = allGroups.filter(group => 
       !userGroupIds.has(group.id)
     );
   }
 
-  // Tab and environment management
   public setActiveTab(tab: string): void {
     this.dashboardState.activeTab = tab;
   }
@@ -305,11 +291,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.userService.updateCurrentUser(updatedUser);
     this.newGroup.environment = newEnvironment;
     
-    // Force reload with the new environment
     this.loadDashboardData();
   }
 
-  // Group management methods
   public joinGroup(groupId: number): void {
     if (!this.validateUserAndLoading()) return;
 
@@ -423,7 +407,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.modalState.groupToDelete = null;
   }
 
-  // Helper methods
   public isUserInGroup(groupId: number): boolean {
     return this.dashboardState.userGroups.some(group => group.id === groupId);
   }
@@ -485,7 +468,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  // Private helper methods
   private validateUserAndLoading(): boolean {
     return !!this.dashboardState.currentUser && !this.loadingState.actionLoading;
   }

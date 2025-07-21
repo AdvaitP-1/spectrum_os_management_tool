@@ -19,7 +19,6 @@ namespace SpectrumManagement.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure User entity
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -27,7 +26,6 @@ namespace SpectrumManagement.Data
                 entity.HasIndex(e => e.Email).IsUnique();
             });
 
-            // Configure Group entity
             modelBuilder.Entity<Group>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -35,7 +33,6 @@ namespace SpectrumManagement.Data
                 entity.HasIndex(e => new { e.Name, e.Environment }).IsUnique();
             });
 
-            // Configure Permission entity
             modelBuilder.Entity<Permission>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -43,7 +40,6 @@ namespace SpectrumManagement.Data
                 entity.HasIndex(e => e.Name).IsUnique();
             });
 
-            // Configure UserGroup relationships
             modelBuilder.Entity<UserGroup>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -62,7 +58,6 @@ namespace SpectrumManagement.Data
                 entity.HasIndex(e => new { e.UserId, e.GroupId }).IsUnique();
             });
 
-            // Configure GroupPermission relationships
             modelBuilder.Entity<GroupPermission>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -81,43 +76,35 @@ namespace SpectrumManagement.Data
                 entity.HasIndex(e => new { e.GroupId, e.PermissionId }).IsUnique();
             });
 
-            // Seed data
             SeedData(modelBuilder);
         }
 
         private void SeedData(ModelBuilder modelBuilder)
         {
-            // Seed Permissions with more comprehensive set
             var permissions = new List<Permission>
             {
-                // Database permissions
                 new Permission { Id = 1, Name = "Read Database", Description = "View database records", Category = "Database" },
                 new Permission { Id = 2, Name = "Write Database", Description = "Create and update database records", Category = "Database" },
                 new Permission { Id = 3, Name = "Delete Database", Description = "Delete database records", Category = "Database" },
                 new Permission { Id = 4, Name = "Database Admin", Description = "Full database administration", Category = "Database" },
                 
-                // API permissions
                 new Permission { Id = 5, Name = "API Access", Description = "Access REST API endpoints", Category = "API" },
                 new Permission { Id = 6, Name = "Admin API", Description = "Access administrative API functions", Category = "API" },
                 new Permission { Id = 7, Name = "External API", Description = "Access external integrations", Category = "API" },
                 
-                // UI permissions
                 new Permission { Id = 8, Name = "UI Access", Description = "Access user interface", Category = "UI" },
                 new Permission { Id = 9, Name = "Dashboard Access", Description = "View system dashboard", Category = "UI" },
                 new Permission { Id = 10, Name = "Analytics Access", Description = "Access analytics and insights", Category = "UI" },
                 
-                // Reports permissions
                 new Permission { Id = 11, Name = "View Reports", Description = "View system reports", Category = "Reports" },
                 new Permission { Id = 12, Name = "Create Reports", Description = "Create custom reports", Category = "Reports" },
                 new Permission { Id = 13, Name = "Export Reports", Description = "Export reports to various formats", Category = "Reports" },
                 
-                // Admin permissions
                 new Permission { Id = 14, Name = "User Management", Description = "Manage user accounts", Category = "Admin" },
                 new Permission { Id = 15, Name = "Group Management", Description = "Manage groups and permissions", Category = "Admin" },
                 new Permission { Id = 16, Name = "System Config", Description = "Configure system settings", Category = "Admin" },
                 new Permission { Id = 17, Name = "Security Admin", Description = "Manage security settings", Category = "Admin" },
                 
-                // Monitoring permissions
                 new Permission { Id = 18, Name = "System Monitoring", Description = "Monitor system health", Category = "Monitoring" },
                 new Permission { Id = 19, Name = "Log Access", Description = "Access system logs", Category = "Monitoring" },
                 new Permission { Id = 20, Name = "Alert Management", Description = "Manage system alerts", Category = "Monitoring" }
@@ -125,7 +112,6 @@ namespace SpectrumManagement.Data
 
             modelBuilder.Entity<Permission>().HasData(permissions);
 
-            // Seed Users - including Advait Pandey
             var users = new List<User>
             {
                 new User { Id = "P1234567", Name = "Patrick Dugan", Email = "patrick.dugan@spectrum.com" },
@@ -142,7 +128,6 @@ namespace SpectrumManagement.Data
 
             modelBuilder.Entity<User>().HasData(users);
 
-            // Seed Groups for each environment
             var groups = new List<Group>();
             var environments = new[] { "QA", "UAT" };
             var groupId = 1;
@@ -162,39 +147,32 @@ namespace SpectrumManagement.Data
 
             modelBuilder.Entity<Group>().HasData(groups);
 
-            // Seed UserGroup relationships
             var userGroups = new List<UserGroup>
             {
-                // QA Environment (Groups 1-6)
-                new UserGroup { Id = 1, UserId = "P1234567", GroupId = 3, AddedBy = "P1234567" }, // Patrick -> QA Admins
-                new UserGroup { Id = 2, UserId = "P4567890", GroupId = 1, AddedBy = "P1234567" }, // Boyuan -> QA Developers
-                new UserGroup { Id = 3, UserId = "P7890123", GroupId = 2, AddedBy = "P1234567" }, // Swetha -> QA Testers
-                new UserGroup { Id = 4, UserId = "P1011121", GroupId = 1, AddedBy = "P1234567" }, // Advait -> QA Developers
-                new UserGroup { Id = 5, UserId = "P1011121", GroupId = 6, AddedBy = "P1234567" }, // Advait -> QA Data Analysts
+                new UserGroup { Id = 1, UserId = "P1234567", GroupId = 3, AddedBy = "P1234567" },
+                new UserGroup { Id = 2, UserId = "P4567890", GroupId = 1, AddedBy = "P1234567" },
+                new UserGroup { Id = 3, UserId = "P7890123", GroupId = 2, AddedBy = "P1234567" },
+                new UserGroup { Id = 4, UserId = "P1011121", GroupId = 1, AddedBy = "P1234567" },
+                new UserGroup { Id = 5, UserId = "P1011121", GroupId = 6, AddedBy = "P1234567" },
                 
-                // UAT Environment (Groups 7-12)
-                new UserGroup { Id = 6, UserId = "P2345678", GroupId = 9, AddedBy = "P1234567" }, // Kent -> UAT Admins
-                new UserGroup { Id = 7, UserId = "P5678901", GroupId = 10, AddedBy = "P1234567" }, // Maria -> UAT Business Users
-                new UserGroup { Id = 8, UserId = "P8901234", GroupId = 8, AddedBy = "P1234567" }, // Sheldon -> UAT Testers
+                new UserGroup { Id = 6, UserId = "P2345678", GroupId = 9, AddedBy = "P1234567" },
+                new UserGroup { Id = 7, UserId = "P5678901", GroupId = 10, AddedBy = "P1234567" },
+                new UserGroup { Id = 8, UserId = "P8901234", GroupId = 8, AddedBy = "P1234567" },
                 
 
             };
 
             modelBuilder.Entity<UserGroup>().HasData(userGroups);
 
-            // Seed GroupPermission relationships
             var groupPermissions = new List<GroupPermission>();
             var permissionId = 1;
 
-            // Define permission sets for different group types
-            var adminPermissions = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }; // All permissions
-            var developerPermissions = new[] { 1, 2, 5, 8, 9, 11, 18, 19 }; // Read/Write DB, API, UI, Reports, Monitoring
-            var testerPermissions = new[] { 1, 5, 8, 9, 11, 12, 18 }; // Read DB, API, UI, Reports, Monitoring
-            var businessUserPermissions = new[] { 1, 8, 9, 10, 11 }; // Read DB, UI, Analytics, Reports
-            var readOnlyPermissions = new[] { 1, 8, 11 }; // Read DB, UI, View Reports
-            var dataAnalystPermissions = new[] { 1, 8, 9, 10, 11, 12, 13 }; // Read DB, UI, Analytics, All Reports
-
-            // Apply permissions to each group in each environment
+            var adminPermissions = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+            var developerPermissions = new[] { 1, 2, 5, 8, 9, 11, 18, 19 };
+            var testerPermissions = new[] { 1, 5, 8, 9, 11, 12, 18 };
+            var businessUserPermissions = new[] { 1, 8, 9, 10, 11 };
+            var readOnlyPermissions = new[] { 1, 8, 11 };
+            var dataAnalystPermissions = new[] { 1, 8, 9, 10, 11, 12, 13 };
             foreach (var env in environments)
             {
                 var envIndex = Array.IndexOf(environments, env);

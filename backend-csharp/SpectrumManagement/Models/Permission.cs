@@ -15,11 +15,10 @@ namespace SpectrumManagement.Models
         public string Description { get; set; } = string.Empty;
         
         [StringLength(50)]
-        public string Category { get; set; } = string.Empty; // e.g., "Database", "API", "UI"
+        public string Category { get; set; } = string.Empty;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
-        // Navigation properties
-        public virtual ICollection<GroupPermission> GroupPermissions { get; set; } = new List<GroupPermission>();
+            public virtual ICollection<GroupPermission> GroupPermissions { get; set; } = new List<GroupPermission>();
     }
 } 
