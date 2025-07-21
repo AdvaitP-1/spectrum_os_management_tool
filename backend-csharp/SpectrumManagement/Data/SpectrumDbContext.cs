@@ -144,7 +144,7 @@ namespace SpectrumManagement.Data
 
             // Seed Groups for each environment
             var groups = new List<Group>();
-            var environments = new[] { "QA", "UAT", "PROD" };
+            var environments = new[] { "QA", "UAT" };
             var groupId = 1;
 
             foreach (var env in environments)
@@ -177,10 +177,7 @@ namespace SpectrumManagement.Data
                 new UserGroup { Id = 7, UserId = "P5678901", GroupId = 10, AddedBy = "P1234567" }, // Maria -> UAT Business Users
                 new UserGroup { Id = 8, UserId = "P8901234", GroupId = 8, AddedBy = "P1234567" }, // Sheldon -> UAT Testers
                 
-                // PROD Environment (Groups 13-18)
-                new UserGroup { Id = 9, UserId = "P3456789", GroupId = 15, AddedBy = "P1234567" }, // Sion -> PROD Admins
-                new UserGroup { Id = 10, UserId = "P6789012", GroupId = 13, AddedBy = "P1234567" }, // Joel -> PROD Developers
-                new UserGroup { Id = 11, UserId = "P9012345", GroupId = 16, AddedBy = "P1234567" } // Jason -> PROD Business Users
+
             };
 
             modelBuilder.Entity<UserGroup>().HasData(userGroups);

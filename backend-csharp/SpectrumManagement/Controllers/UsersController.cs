@@ -232,7 +232,7 @@ namespace SpectrumManagement.Controllers
                 CurrentEnvironment = user.CurrentEnvironment,
                 CreatedAt = user.CreatedAt,
                 LastLoginAt = user.LastLoginAt,
-                Groups = user.UserGroups.Where(ug => ug.Group.Environment == user.CurrentEnvironment).Select(ug => new SimpleGroupDto
+                Groups = user.UserGroups.Select(ug => new SimpleGroupDto
                 {
                     Id = ug.Group.Id,
                     Name = ug.Group.Name,

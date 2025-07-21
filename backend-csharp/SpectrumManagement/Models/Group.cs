@@ -16,7 +16,7 @@ namespace SpectrumManagement.Models
         
         [Required]
         [StringLength(10)]
-        public string Environment { get; set; } = string.Empty; // QA, UAT, PROD
+        public string Environment { get; set; } = string.Empty; // QA, UAT
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string CreatedBy { get; set; } = string.Empty;

@@ -2,11 +2,11 @@
 <header class="bg-white border-b border-gray-200 px-6 py-4">
   <div class="flex items-center justify-between">
     <div class="flex items-center space-x-4">
-      <h1 class="text-2xl font-bold text-gray-900">Spectrum Management</h1>
+              <h1 class="text-2xl font-bold text-gray-900">Spectrum Access</h1>
       <div class="flex items-center space-x-2">
         <span class="text-sm text-gray-500">Environment:</span>
-        <select [(ngModel)]="currentEnvironment" 
-                (change)="switchEnvironment()"
+        <select [ngModel]="currentEnvironment" 
+                (ngModelChange)="onEnvironmentChange($event)"
                 class="px-3 py-1 border border-gray-300 rounded-md text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="QA">QA</option>
           <option value="UAT">UAT</option>
@@ -103,55 +103,99 @@
           </button>
         </div>
         
-        <div *ngIf="userGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div *ngFor="let group of userGroups" 
-               class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer group"
-               (click)="selectGroup(group)">
-            <div class="p-6">
-              <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-lg font-bold text-white">
-                    {{group.name.charAt(0) || 'G'}}
-                  </span>
+        <div *ngIf="userGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div *ngFor="let group of userGroups; let i = index" 
+               class="group relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-indigo-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-blue-100/50 backdrop-blur-sm"
+               (click)="selectGroup(group)"
+               [style.animation-delay]="(i * 100) + 'ms'">
+            <!-- Animated background elements -->
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="absolute -bottom-8 -left-8 w-16 h-16 bg-gradient-to-tr from-indigo-400/20 to-pink-400/20 rounded-full blur-lg group-hover:scale-125 transition-transform duration-700"></div>
+            
+            <div class="relative p-8">
+              <!-- Header with enhanced styling -->
+              <div class="flex items-start justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                  <div class="relative">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-xl font-bold text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                      {{group.name.charAt(0) || 'G'}}
+                    </div>
+                    <div class="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+                      <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
                       {{group.name}}
                     </h3>
-                    <p class="text-sm text-gray-500">{{group.environment}}</p>
+                    <div class="flex items-center space-x-2 mt-1">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                        {{group.environment}}
+                      </span>
+                      <span class="text-xs text-gray-500">• Active</span>
+                    </div>
                   </div>
                 </div>
-                <div class="flex space-x-2">
+                <div class="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button (click)="leaveGroup(group.id); $event.stopPropagation()" 
-                          class="text-red-500 hover:text-red-700 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          class="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all duration-200 hover:scale-110">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
                   </button>
                   <button (click)="deleteGroup(group); $event.stopPropagation()" 
-                          class="text-gray-500 hover:text-red-700 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          class="p-2 rounded-lg bg-gray-50 hover:bg-red-100 text-gray-500 hover:text-red-700 transition-all duration-200 hover:scale-110">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                   </button>
                 </div>
               </div>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{group.description}}</p>
-              <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center space-x-4">
-                  <span class="text-gray-500">{{group.users?.length || 0}} members</span>
-                  <span class="text-gray-500">{{getGroupPermissions(group).length}} permissions</span>
+              
+              <!-- Description with enhanced styling -->
+              <p class="text-gray-700 text-sm mb-6 leading-relaxed line-clamp-2 group-hover:text-gray-800 transition-colors duration-300">
+                {{group.description}}
+              </p>
+              
+              <!-- Stats with enhanced styling -->
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-6">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-gray-700">{{group.users?.length || 0}} members</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-gray-700">{{getGroupPermissions(group).length}} permissions</span>
+                  </div>
                 </div>
               </div>
-              <div *ngIf="getGroupPermissions(group).length > 0" class="mt-3 flex flex-wrap gap-1">
-                <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                  {{permission.name}}
-                </span>
-                <span *ngIf="getGroupPermissions(group).length > 3" 
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
-                  +{{getGroupPermissions(group).length - 3}} more
-                </span>
+              
+              <!-- Permissions with enhanced styling -->
+              <div *ngIf="getGroupPermissions(group).length > 0" class="space-y-3">
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  <span class="text-xs font-medium text-gray-600 uppercase tracking-wide">Permissions</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
+                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200/50 hover:from-blue-200 hover:to-indigo-200 transition-all duration-200 hover:scale-105">
+                    {{permission.name}}
+                  </span>
+                  <span *ngIf="getGroupPermissions(group).length > 3" 
+                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-600 border border-gray-200/50 hover:from-gray-200 hover:to-slate-200 transition-all duration-200 hover:scale-105">
+                    +{{getGroupPermissions(group).length - 3}} more
+                  </span>
+                </div>
               </div>
+              
+              <!-- Bottom accent line -->
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
         </div>
@@ -174,47 +218,92 @@
           <p class="text-gray-500">You're a member of all available groups in this environment.</p>
         </div>
         
-        <div *ngIf="availableGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div *ngFor="let group of availableGroups" 
-               class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer group"
-               (click)="selectGroup(group)">
-            <div class="p-6">
-              <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center space-x-3">
-                  <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-500 text-lg font-bold text-white">
-                    {{group.name.charAt(0) || 'G'}}
-                  </span>
+        <div *ngIf="availableGroups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div *ngFor="let group of availableGroups; let i = index" 
+               class="group relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer border border-emerald-100/50 backdrop-blur-sm"
+               (click)="selectGroup(group)"
+               [style.animation-delay]="(i * 100) + 'ms'">
+            <!-- Animated background elements -->
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+            <div class="absolute -bottom-8 -left-8 w-16 h-16 bg-gradient-to-tr from-teal-400/20 to-cyan-400/20 rounded-full blur-lg group-hover:scale-125 transition-transform duration-700"></div>
+            
+            <div class="relative p-8">
+              <!-- Header with enhanced styling -->
+              <div class="flex items-start justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                  <div class="relative">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xl font-bold text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                      {{group.name.charAt(0) || 'G'}}
+                    </div>
+                    <div class="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center animate-pulse">
+                      <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
                   <div>
-                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                    <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-300">
                       {{group.name}}
                     </h3>
-                    <p class="text-sm text-gray-500">{{group.environment}}</p>
+                    <div class="flex items-center space-x-2 mt-1">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        {{group.environment}}
+                      </span>
+                      <span class="text-xs text-gray-500">• Available</span>
+                    </div>
                   </div>
                 </div>
                 <button (click)="joinGroup(group.id); $event.stopPropagation()" 
-                        class="text-green-500 hover:text-green-700 transition-colors">
+                        class="p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-600 hover:text-emerald-700 transition-all duration-200 hover:scale-110 shadow-sm hover:shadow-md opacity-0 group-hover:opacity-100">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                   </svg>
                 </button>
               </div>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{group.description}}</p>
-              <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center space-x-4">
-                  <span class="text-gray-500">{{group.users?.length || 0}} members</span>
-                  <span class="text-gray-500">{{getGroupPermissions(group).length}} permissions</span>
+              
+              <!-- Description with enhanced styling -->
+              <p class="text-gray-700 text-sm mb-6 leading-relaxed line-clamp-2 group-hover:text-gray-800 transition-colors duration-300">
+                {{group.description}}
+              </p>
+              
+              <!-- Stats with enhanced styling -->
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-6">
+                  <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-gray-700">{{group.users?.length || 0}} members</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-medium text-gray-700">{{getGroupPermissions(group).length}} permissions</span>
+                  </div>
                 </div>
               </div>
-              <div *ngIf="getGroupPermissions(group).length > 0" class="mt-3 flex flex-wrap gap-1">
-                <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                  {{permission.name}}
-                </span>
-                <span *ngIf="getGroupPermissions(group).length > 3" 
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
-                  +{{getGroupPermissions(group).length - 3}} more
-                </span>
+              
+              <!-- Permissions with enhanced styling -->
+              <div *ngIf="getGroupPermissions(group).length > 0" class="space-y-3">
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  <span class="text-xs font-medium text-gray-600 uppercase tracking-wide">Permissions</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <span *ngFor="let permission of getGroupPermissions(group).slice(0, 3)" 
+                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200/50 hover:from-emerald-200 hover:to-teal-200 transition-all duration-200 hover:scale-105">
+                    {{permission.name}}
+                  </span>
+                  <span *ngIf="getGroupPermissions(group).length > 3" 
+                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-gray-100 to-slate-100 text-gray-600 border border-gray-200/50 hover:from-gray-200 hover:to-slate-200 transition-all duration-200 hover:scale-105">
+                    +{{getGroupPermissions(group).length - 3}} more
+                  </span>
+                </div>
               </div>
+              
+              <!-- Bottom accent line -->
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
         </div>
@@ -245,7 +334,6 @@
                 </div>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-gray-500">{{user.currentEnvironment}}</span>
                 <span class="text-gray-500">{{getUserPermissions(user).length}} permissions</span>
               </div>
               <div *ngIf="getUserPermissions(user).length > 0" class="mt-3 flex flex-wrap gap-1">

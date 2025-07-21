@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpectrumManagement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5f9a78ffc70ed6aa943a198d92ae7efe1b20bb8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9397395381b8cca21819193a38a7ad088338ba3e")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpectrumManagement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpectrumManagement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -217,7 +217,7 @@ namespace SpectrumManagement.Controllers
         [HttpGet("environments")]
         public ActionResult<IEnumerable<string>> GetEnvironments()
         {
-            var environments = new[] { "QA", "UAT", "PROD" };
+            var environments = new[] { "QA", "UAT" };
             return Ok(environments);
         }
 
@@ -240,6 +240,48 @@ namespace SpectrumManagement.Controllers
             }
 
             var userGroups = await query.ToListAsync();
+
+            var groupDtos = userGroups.Select(ug => new GroupDto
+            {
+                Id = ug.Group.Id,
+                Name = ug.Group.Name,
+                Description = ug.Group.Description,
+                Environment = ug.Group.Environment,
+                CreatedAt = ug.Group.CreatedAt,
+                CreatedBy = ug.Group.CreatedBy,
+                UserCount = ug.Group.UserGroups.Count,
+                Users = ug.Group.UserGroups.Select(ug2 => new SimpleUserDto
+                {
+                    Id = ug2.User.Id,
+                    Name = ug2.User.Name,
+                    Email = ug2.User.Email,
+                    CurrentEnvironment = ug2.User.CurrentEnvironment
+                }).ToList(),
+                Permissions = ug.Group.GroupPermissions.Select(gp => new PermissionDto
+                {
+                    Id = gp.Permission.Id,
+                    Name = gp.Permission.Name,
+                    Description = gp.Permission.Description,
+                    Category = gp.Permission.Category,
+                    CreatedAt = gp.Permission.CreatedAt
+                }).ToList()
+            }).ToList();
+
+            return Ok(groupDtos);
+        }
+
+        [HttpGet("by-user/{userId}/all")]
+        public async Task<ActionResult<IEnumerable<GroupDto>>> GetAllGroupsByUser(string userId)
+        {
+            var userGroups = await _context.UserGroups
+                .Include(ug => ug.Group)
+                    .ThenInclude(g => g.GroupPermissions)
+                        .ThenInclude(gp => gp.Permission)
+                .Include(ug => ug.Group)
+                    .ThenInclude(g => g.UserGroups)
+                        .ThenInclude(ug2 => ug2.User)
+                .Where(ug => ug.UserId == userId)
+                .ToListAsync();
 
             var groupDtos = userGroups.Select(ug => new GroupDto
             {

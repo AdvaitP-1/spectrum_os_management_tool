@@ -25,6 +25,10 @@ export class ApiService {
     return this.http.get<User[]>(`${this.baseUrl}/users`, { params });
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/users`);
+  }
+
   getUser(id: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/users/${id}`);
   }
@@ -63,6 +67,8 @@ export class ApiService {
     if (environment) {
       params = params.set('environment', environment);
     }
+    // Add cache-busting parameter
+    params = params.set('_t', Date.now().toString());
     return this.http.get<Group[]>(`${this.baseUrl}/groups`, { params });
   }
 
@@ -97,6 +103,10 @@ export class ApiService {
       params = params.set('environment', environment);
     }
     return this.http.get<Group[]>(`${this.baseUrl}/groups/by-user/${userId}`, { params });
+  }
+
+  getAllGroupsByUser(userId: string): Observable<Group[]> {
+    return this.http.get<Group[]>(`${this.baseUrl}/groups/by-user/${userId}/all`);
   }
 
   getEnvironments(): Observable<string[]> {

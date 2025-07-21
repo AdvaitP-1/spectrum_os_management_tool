@@ -137,6 +137,10 @@ export class DashboardPage implements OnInit, OnDestroy {
     return this.dashboardState.currentEnvironment;
   }
 
+  set currentEnvironment(value: string) {
+    this.dashboardState.currentEnvironment = value;
+  }
+
   get activeTab(): string {
     return this.dashboardState.activeTab;
   }
@@ -223,12 +227,13 @@ export class DashboardPage implements OnInit, OnDestroy {
   private loadDashboardData(): void {
     if (!this.dashboardState.currentUser) return;
 
+    const currentEnv = this.dashboardState.currentEnvironment;
     this.loadingState.dataLoading = true;
 
     const requests = forkJoin([
-      this.apiService.getUserGroups(this.dashboardState.currentUser.id, this.dashboardState.currentEnvironment),
-      this.apiService.getAllGroups(this.dashboardState.currentEnvironment), 
-      this.apiService.getUsers(this.dashboardState.currentEnvironment),
+      this.apiService.getAllGroupsByUser(this.dashboardState.currentUser.id),
+      this.apiService.getAllGroups(currentEnv), 
+      this.apiService.getAllUsers(),
       this.apiService.getPermissions(),
       this.apiService.getPermissionCategories()
     ]);
@@ -270,6 +275,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   private updateAvailableGroups(allGroups: Group[], userGroups: Group[]): void {
+    // Filter out groups the user is already in
     const userGroupIds = new Set(userGroups.map(group => group.id));
     this.dashboardState.availableGroups = allGroups.filter(group => 
       !userGroupIds.has(group.id)
@@ -281,16 +287,25 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.dashboardState.activeTab = tab;
   }
 
+  public onEnvironmentChange(newEnvironment: string): void {
+    this.dashboardState.currentEnvironment = newEnvironment;
+    this.switchEnvironment();
+  }
+
   public switchEnvironment(): void {
     if (!this.dashboardState.currentUser) return;
 
+    const newEnvironment = this.dashboardState.currentEnvironment;
+
     const updatedUser: User = {
       ...this.dashboardState.currentUser,
-      currentEnvironment: this.dashboardState.currentEnvironment
+      currentEnvironment: newEnvironment
     };
 
     this.userService.updateCurrentUser(updatedUser);
-    this.newGroup.environment = this.dashboardState.currentEnvironment;
+    this.newGroup.environment = newEnvironment;
+    
+    // Force reload with the new environment
     this.loadDashboardData();
   }
 

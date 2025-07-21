@@ -139,27 +139,7 @@ using (var scope = app.Services.CreateScope())
                 Environment = "QA",
                 CreatedBy = "System"
             },
-            new Group 
-            { 
-                Name = "Database Admins", 
-                Description = "Full database administration access", 
-                Environment = "PROD",
-                CreatedBy = "System"
-            },
-            new Group 
-            { 
-                Name = "API Developers", 
-                Description = "API development access", 
-                Environment = "PROD",
-                CreatedBy = "System"
-            },
-            new Group 
-            { 
-                Name = "Read Only Users", 
-                Description = "Read-only access to systems", 
-                Environment = "PROD",
-                CreatedBy = "System"
-            }
+
         };
         
         context.Groups.AddRange(groups);

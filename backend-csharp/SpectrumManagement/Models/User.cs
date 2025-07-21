@@ -17,7 +17,7 @@ namespace SpectrumManagement.Models
         
         [Required]
         [StringLength(10)]
-        public string CurrentEnvironment { get; set; } = "QA"; // QA, UAT, PROD
+        public string CurrentEnvironment { get; set; } = "QA"; // QA, UAT
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime LastLoginAt { get; set; } = DateTime.UtcNow;
