@@ -130,7 +130,6 @@ namespace CharterAccess.Data
 
             var groups = new List<Group>
             {
-                // QA Environment Groups
                 new Group { Id = 1, Name = "Developers", Description = "Development team members with coding and deployment access", Environment = "QA", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 new Group { Id = 2, Name = "Testers", Description = "Quality assurance team with testing and validation permissions", Environment = "QA", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 new Group { Id = 3, Name = "Admins", Description = "System administrators with full access privileges", Environment = "QA", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
@@ -138,7 +137,6 @@ namespace CharterAccess.Data
                 new Group { Id = 5, Name = "Read Only", Description = "Users with read-only access to view system information", Environment = "QA", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 new Group { Id = 6, Name = "Data Analysts", Description = "Users focused on data analysis and reporting", Environment = "QA", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 
-                // UAT Environment Groups
                 new Group { Id = 7, Name = "Developers", Description = "Development team members with coding and deployment access", Environment = "UAT", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 new Group { Id = 8, Name = "Testers", Description = "Quality assurance team with testing and validation permissions", Environment = "UAT", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
                 new Group { Id = 9, Name = "Admins", Description = "System administrators with full access privileges", Environment = "UAT", CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), CreatedBy = "P1234567" },
@@ -166,7 +164,6 @@ namespace CharterAccess.Data
 
             var groupPermissions = new List<GroupPermission>
             {
-                // QA Environment - Developers (Group 1)
                 new GroupPermission { Id = 1, GroupId = 1, PermissionId = 1, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 2, GroupId = 1, PermissionId = 2, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 3, GroupId = 1, PermissionId = 5, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
@@ -176,7 +173,6 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 7, GroupId = 1, PermissionId = 18, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 8, GroupId = 1, PermissionId = 19, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
 
-                // QA Environment - Testers (Group 2)
                 new GroupPermission { Id = 9, GroupId = 2, PermissionId = 1, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 10, GroupId = 2, PermissionId = 5, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 11, GroupId = 2, PermissionId = 8, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
@@ -185,7 +181,6 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 14, GroupId = 2, PermissionId = 12, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
                 new GroupPermission { Id = 15, GroupId = 2, PermissionId = 18, GrantedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc), GrantedBy = "P1234567" },
 
-                // QA Environment - Admins (Group 3) - All permissions
                 new GroupPermission { Id = 16, GroupId = 3, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 17, GroupId = 3, PermissionId = 2, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 18, GroupId = 3, PermissionId = 3, GrantedBy = "P1234567" },
@@ -207,19 +202,16 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 34, GroupId = 3, PermissionId = 19, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 35, GroupId = 3, PermissionId = 20, GrantedBy = "P1234567" },
 
-                // QA Environment - Business Users (Group 4)
                 new GroupPermission { Id = 36, GroupId = 4, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 37, GroupId = 4, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 38, GroupId = 4, PermissionId = 9, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 39, GroupId = 4, PermissionId = 10, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 40, GroupId = 4, PermissionId = 11, GrantedBy = "P1234567" },
 
-                // QA Environment - Read Only (Group 5)
                 new GroupPermission { Id = 41, GroupId = 5, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 42, GroupId = 5, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 43, GroupId = 5, PermissionId = 11, GrantedBy = "P1234567" },
 
-                // QA Environment - Data Analysts (Group 6)
                 new GroupPermission { Id = 44, GroupId = 6, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 45, GroupId = 6, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 46, GroupId = 6, PermissionId = 9, GrantedBy = "P1234567" },
@@ -228,7 +220,6 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 49, GroupId = 6, PermissionId = 12, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 50, GroupId = 6, PermissionId = 13, GrantedBy = "P1234567" },
 
-                // UAT Environment - Developers (Group 7)
                 new GroupPermission { Id = 51, GroupId = 7, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 52, GroupId = 7, PermissionId = 2, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 53, GroupId = 7, PermissionId = 5, GrantedBy = "P1234567" },
@@ -238,7 +229,6 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 57, GroupId = 7, PermissionId = 18, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 58, GroupId = 7, PermissionId = 19, GrantedBy = "P1234567" },
 
-                // UAT Environment - Testers (Group 8)
                 new GroupPermission { Id = 59, GroupId = 8, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 60, GroupId = 8, PermissionId = 5, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 61, GroupId = 8, PermissionId = 8, GrantedBy = "P1234567" },
@@ -247,7 +237,6 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 64, GroupId = 8, PermissionId = 12, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 65, GroupId = 8, PermissionId = 18, GrantedBy = "P1234567" },
 
-                // UAT Environment - Admins (Group 9) - All permissions
                 new GroupPermission { Id = 66, GroupId = 9, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 67, GroupId = 9, PermissionId = 2, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 68, GroupId = 9, PermissionId = 3, GrantedBy = "P1234567" },
@@ -269,19 +258,16 @@ namespace CharterAccess.Data
                 new GroupPermission { Id = 84, GroupId = 9, PermissionId = 19, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 85, GroupId = 9, PermissionId = 20, GrantedBy = "P1234567" },
 
-                // UAT Environment - Business Users (Group 10)
                 new GroupPermission { Id = 86, GroupId = 10, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 87, GroupId = 10, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 88, GroupId = 10, PermissionId = 9, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 89, GroupId = 10, PermissionId = 10, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 90, GroupId = 10, PermissionId = 11, GrantedBy = "P1234567" },
 
-                // UAT Environment - Read Only (Group 11)
                 new GroupPermission { Id = 91, GroupId = 11, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 92, GroupId = 11, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 93, GroupId = 11, PermissionId = 11, GrantedBy = "P1234567" },
 
-                // UAT Environment - Data Analysts (Group 12)
                 new GroupPermission { Id = 94, GroupId = 12, PermissionId = 1, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 95, GroupId = 12, PermissionId = 8, GrantedBy = "P1234567" },
                 new GroupPermission { Id = 96, GroupId = 12, PermissionId = 9, GrantedBy = "P1234567" },

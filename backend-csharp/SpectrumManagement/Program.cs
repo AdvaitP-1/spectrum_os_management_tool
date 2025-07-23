@@ -53,7 +53,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -197,7 +196,6 @@ using (var scope = app.Services.CreateScope())
         context.GroupPermissions.AddRange(groupPermissions);
         context.SaveChanges();
         
-        // Add some demo users
         if (!context.Users.Any())
         {
             var users = new List<User>
@@ -217,14 +215,13 @@ using (var scope = app.Services.CreateScope())
             context.Users.AddRange(users);
             context.SaveChanges();
             
-            // Add some user-group relationships
             var userGroups = new List<UserGroup>
             {
-                new UserGroup { UserId = "P1234567", GroupId = 1, AddedBy = "System" }, // Patrick in Database Admins
-                new UserGroup { UserId = "P4567890", GroupId = 2, AddedBy = "System" }, // Boyuan in API Developers
-                new UserGroup { UserId = "P7890123", GroupId = 2, AddedBy = "System" }, // Swetha in API Developers
-                new UserGroup { UserId = "P1011121", GroupId = 2, AddedBy = "System" }, // Advait in API Developers
-                new UserGroup { UserId = "P1011121", GroupId = 3, AddedBy = "System" }  // Advait also in System Operators
+                new UserGroup { UserId = "P1234567", GroupId = 1, AddedBy = "System" },
+                new UserGroup { UserId = "P4567890", GroupId = 2, AddedBy = "System" },
+                new UserGroup { UserId = "P7890123", GroupId = 2, AddedBy = "System" },
+                new UserGroup { UserId = "P1011121", GroupId = 2, AddedBy = "System" },
+                new UserGroup { UserId = "P1011121", GroupId = 3, AddedBy = "System" }
             };
             
             context.UserGroups.AddRange(userGroups);

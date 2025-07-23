@@ -115,13 +115,13 @@ namespace CharterAccess.Controllers
                 Name = createGroupDto.Name,
                 Description = createGroupDto.Description,
                 Environment = createGroupDto.Environment,
-                CreatedBy = "P1234567" // In a real app, this would come from authentication
+                CreatedBy = "P1234567"
             };
 
             _context.Groups.Add(group);
             await _context.SaveChangesAsync();
 
-            // Add permissions to the group
+
             if (createGroupDto.PermissionIds.Any())
             {
                 var groupPermissions = createGroupDto.PermissionIds.Select(permissionId => new GroupPermission
@@ -135,7 +135,7 @@ namespace CharterAccess.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // Reload the group with its permissions
+
             var createdGroup = await _context.Groups
                 .Include(g => g.GroupPermissions)
                     .ThenInclude(gp => gp.Permission)
@@ -179,7 +179,7 @@ namespace CharterAccess.Controllers
             group.Name = updateGroupDto.Name;
             group.Description = updateGroupDto.Description;
 
-            // Update permissions
+
             _context.GroupPermissions.RemoveRange(group.GroupPermissions);
             
             if (updateGroupDto.PermissionIds.Any())
