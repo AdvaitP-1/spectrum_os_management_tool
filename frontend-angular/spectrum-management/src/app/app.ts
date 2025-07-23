@@ -18,5 +18,5 @@ import { RouterOutlet } from '@angular/router';
   `]
 })
 export class AppComponent {
-  title = 'spectrum-management';
+  title = 'charter-access';
 }

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   apiUrl: 'https://your-api-domain.com/api',
-  appName: 'Spectrum OS Management Tool',
+  appName: 'Charter Access OS Management Tool',
   version: '1.0.0'
 }; 

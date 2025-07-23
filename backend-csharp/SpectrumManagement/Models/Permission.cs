@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SpectrumManagement.Models
+namespace CharterAccess.Models
 {
     public class Permission
     {

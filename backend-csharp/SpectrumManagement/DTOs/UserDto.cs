@@ -1,4 +1,4 @@
-namespace SpectrumManagement.DTOs
+namespace CharterAccess.DTOs
 {
     public class UserDto
     {

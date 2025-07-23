@@ -1,4 +1,4 @@
-# Spectrum OS Management Tool
+# Charter Access OS Management Tool
 
 A comprehensive user and group management system built with .NET Core backend and Angular frontend.
 

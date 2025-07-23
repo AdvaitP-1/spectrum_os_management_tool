@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "spectrum-management": {
+    "charter-access": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/spectrum-management",
+            "outputPath": "dist/charter-access",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -73,10 +73,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "spectrum-management:build:production"
+              "buildTarget": "charter-access:build:production"
             },
             "development": {
-              "buildTarget": "spectrum-management:build:development"
+              "buildTarget": "charter-access:build:development"
             }
           },
           "defaultConfiguration": "development"

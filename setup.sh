@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Setting up Spectrum OS Management Tool..."
+echo "🚀 Setting up Charter Access OS Management Tool..."
 
 # Check if .NET is installed
 if ! command -v dotnet &> /dev/null; then

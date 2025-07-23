@@ -20,6 +20,7 @@ interface DashboardState {
   permissionCategories: string[];
   currentEnvironment: string;
   activeTab: string;
+  darkMode: boolean;
 }
 
 interface ModalState {
@@ -60,7 +61,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     allPermissions: [],
     permissionCategories: [],
     currentEnvironment: 'QA',
-    activeTab: 'my-groups'
+    activeTab: 'my-groups',
+    darkMode: false
   };
 
   public modalState: ModalState = {
@@ -182,9 +184,36 @@ export class DashboardPage implements OnInit, OnDestroy {
     return this.messageState.errorMessage;
   }
 
+  get darkMode(): boolean {
+    return this.dashboardState.darkMode;
+  }
+
+  set darkMode(value: boolean) {
+    this.dashboardState.darkMode = value;
+    this.applyDarkMode();
+  }
+
   private initializeComponent(): void {
+    // Initialize dark mode from localStorage
+    const savedDarkMode = localStorage.getItem('darkMode');
+    this.dashboardState.darkMode = savedDarkMode === 'true';
+    this.applyDarkMode();
+    
     this.subscribeToUserChanges();
     this.loadInitialData();
+  }
+
+  public toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+    localStorage.setItem('darkMode', this.darkMode.toString());
+  }
+
+  private applyDarkMode(): void {
+    if (this.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   private subscribeToUserChanges(): void {
@@ -503,9 +532,13 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   private handleGroupActionSuccess(groupId: number): void {
+    // Close modal if the selected group was the one that was modified
     if (this.modalState.selectedGroup?.id === groupId) {
       this.closeModal();
     }
+    
+    // Reload dashboard data to update user group memberships in the "All Users" tab
+    this.loadDashboardData();
   }
 
   private handleCreateSuccess(message: string): void {

@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SpectrumManagement.Data;
-using SpectrumManagement.DTOs;
-using SpectrumManagement.Models;
+using CharterAccess.Data;
+using CharterAccess.DTOs;
+using CharterAccess.Models;
 
-namespace SpectrumManagement.Controllers
+namespace CharterAccess.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class PermissionsController : ControllerBase
     {
-        private readonly SpectrumDbContext _context;
+        private readonly CharterAccessDbContext _context;
 
-        public PermissionsController(SpectrumDbContext context)
+        public PermissionsController(CharterAccessDbContext context)
         {
             _context = context;
         }

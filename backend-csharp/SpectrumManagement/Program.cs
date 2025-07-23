@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SpectrumManagement.Data;
-using SpectrumManagement.Models;
+using CharterAccess.Data;
+using CharterAccess.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +13,15 @@ var useInMemoryDb = builder.Configuration.GetValue<bool>("UseInMemoryDatabase", 
 
 if (useInMemoryDb || string.IsNullOrEmpty(connectionString))
 {
-    builder.Services.AddDbContext<SpectrumDbContext>(options =>
-        options.UseInMemoryDatabase("SpectrumManagementInMemory"));
+            builder.Services.AddDbContext<CharterAccessDbContext>(options =>
+            options.UseInMemoryDatabase("CharterAccessInMemory"));
     Console.WriteLine("Using in-memory database for development");
 }
 else
 {
-    builder.Services.AddDbContext<SpectrumDbContext>(options =>
-        options.UseSqlServer(connectionString));
-    Console.WriteLine($"Using SQL Server database: {connectionString}");
+            builder.Services.AddDbContext<CharterAccessDbContext>(options =>
+            options.UseSqlite(connectionString));
+    Console.WriteLine($"Using SQLite database: {connectionString}");
 }
 
 builder.Services.AddCors(options =>
@@ -69,7 +69,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SpectrumDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<CharterAccessDbContext>();
     
     if (useInMemoryDb || string.IsNullOrEmpty(connectionString))
     {
@@ -196,6 +196,40 @@ using (var scope = app.Services.CreateScope())
         
         context.GroupPermissions.AddRange(groupPermissions);
         context.SaveChanges();
+        
+        // Add some demo users
+        if (!context.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User { Id = "P1234567", Name = "Patrick Dugan", Email = "patrick.dugan@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P2345678", Name = "Kent Herbst", Email = "kent.herbst@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P3456789", Name = "Sion Pixley", Email = "sion.pixley@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P4567890", Name = "Boyuan Bruce Sun", Email = "boyuan.sun@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P5678901", Name = "Maria Alvarez Anticona", Email = "maria.alvarez@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P6789012", Name = "Joel Black", Email = "joel.black@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P7890123", Name = "Swetha Priya Yarlagadda", Email = "swetha.yarlagadda@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P8901234", Name = "Sheldon Skaggs", Email = "sheldon.skaggs@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P9012345", Name = "Jason Routh", Email = "jason.routh@charter.com", CurrentEnvironment = "QA" },
+                new User { Id = "P1011121", Name = "Advait Pandey", Email = "advait.pandey@charter.com", CurrentEnvironment = "QA" }
+            };
+            
+            context.Users.AddRange(users);
+            context.SaveChanges();
+            
+            // Add some user-group relationships
+            var userGroups = new List<UserGroup>
+            {
+                new UserGroup { UserId = "P1234567", GroupId = 1, AddedBy = "System" }, // Patrick in Database Admins
+                new UserGroup { UserId = "P4567890", GroupId = 2, AddedBy = "System" }, // Boyuan in API Developers
+                new UserGroup { UserId = "P7890123", GroupId = 2, AddedBy = "System" }, // Swetha in API Developers
+                new UserGroup { UserId = "P1011121", GroupId = 2, AddedBy = "System" }, // Advait in API Developers
+                new UserGroup { UserId = "P1011121", GroupId = 3, AddedBy = "System" }  // Advait also in System Operators
+            };
+            
+            context.UserGroups.AddRange(userGroups);
+            context.SaveChanges();
+        }
     }
 }
 

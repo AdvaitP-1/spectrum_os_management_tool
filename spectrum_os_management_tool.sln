@@ -4,7 +4,7 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend-csharp", "backend-csharp", "{9282804A-3298-B2C8-BADC-E5A863B1FAAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpectrumManagement", "backend-csharp\SpectrumManagement\SpectrumManagement.csproj", "{AC489BD0-A0CE-64F7-D861-7E8AD5283A41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharterAccess", "backend-csharp\SpectrumManagement\SpectrumManagement.csproj", "{AC489BD0-A0CE-64F7-D861-7E8AD5283A41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
