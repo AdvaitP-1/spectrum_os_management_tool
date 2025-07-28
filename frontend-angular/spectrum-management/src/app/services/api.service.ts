@@ -25,7 +25,7 @@ export class ApiService {
   }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/users`);
+    return this.http.get<User[]>(`${this.baseUrl}/users/all`);
   }
 
   getUser(id: string): Observable<User> {

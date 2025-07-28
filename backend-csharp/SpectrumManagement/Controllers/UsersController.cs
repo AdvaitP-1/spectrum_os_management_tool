@@ -56,6 +56,38 @@ namespace CharterAccess.Controllers
             return Ok(userDtos);
         }
 
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        {
+            var users = await _context.Users
+                .Include(u => u.UserGroups)
+                    .ThenInclude(ug => ug.Group)
+                        .ThenInclude(g => g.GroupPermissions)
+                            .ThenInclude(gp => gp.Permission)
+                .ToListAsync();
+
+            var userDtos = users.Select(u => new UserDto
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Email = u.Email,
+                CurrentEnvironment = u.CurrentEnvironment,
+                CreatedAt = u.CreatedAt,
+                LastLoginAt = u.LastLoginAt,
+                Groups = u.UserGroups.Select(ug => new SimpleGroupDto
+                {
+                    Id = ug.Group.Id,
+                    Name = ug.Group.Name,
+                    Description = ug.Group.Description,
+                    Environment = ug.Group.Environment,
+                    CreatedAt = ug.Group.CreatedAt,
+                    UserCount = ug.Group.UserGroups.Count
+                }).ToList()
+            }).ToList();
+
+            return Ok(userDtos);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUser(string id)
         {
